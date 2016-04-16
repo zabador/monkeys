@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"net/http"
+	"strconv"
+	"encoding/json"
+	"bytes"
 )
 
 func main() {
@@ -33,7 +37,7 @@ func main() {
 				if i > longestLength {
 					longestLength = i
 					longestMatch = s[:i+1]
-					post(int64(count), longestMatch)
+					post(int64(count), longestMatch, time.Now().Sub(t0).Minutes())
 				}
 				// if we match all of monkeys then set flag to false
 				if i == len(s) - 1 {
@@ -47,15 +51,41 @@ func main() {
 			m := d.Minutes()
 			if m > 5.0 {
 				t1 = time.Now()
-				fmt.Println("Total duration:", time.Now().Sub(t0))
-				post(int64(count), longestMatch)
-
+				post(int64(count), longestMatch, time.Now().Sub(t0).Minutes())
 			}
 		}
 		count++
 	}
 }
 
-func post(i int64, s []byte){
-	fmt.Printf("Count: %v, Longest: %v\n", i, string(s))
+func post(i int64, s []byte, d float64){
+	url := "http://localhost:8000/post"
+
+	var jsonRequest struct {
+		Count int64
+		Longest string
+		Duration string
+	}
+
+	jsonRequest.Count = i
+	jsonRequest.Longest = string(s)
+	dur := strconv.FormatFloat(d, 'f', -1, 64)
+	jsonRequest.Duration = dur
+
+	j,_ := json.Marshal(jsonRequest)
+
+	fmt.Println(string(j))
+
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+
+    if err != nil {
+        fmt.Println("Failure to post")
+    } else {
+		resp.Body.Close()
+	}
+
 }
