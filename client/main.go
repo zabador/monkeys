@@ -55,7 +55,7 @@ func main() {
 			// check duration and post update every 5 minutes
 			d := time.Now().Sub(t1)
 			m := d.Minutes()
-			if m > 1.0 {
+			if m > 5.0 {
 				t1 = time.Now()
 				post(int64(count), longestMatch, matches, time.Now().Sub(t0).Minutes())
 			}
