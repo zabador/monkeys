@@ -11,6 +11,7 @@ type test_struct struct {
 	Count int64
 	Longest string
 	Duration string
+	Matches int64
 }
 
 var t test_struct
@@ -19,7 +20,8 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	count := fmt.Sprintf("%v", t.Count)
 	io.WriteString(w, "Count: " + count + "\n")
 
-	io.WriteString(w, "Longest: " + t.Longest + "\n")
+	matches := fmt.Sprintf("%v", t.Matches)
+	io.WriteString(w, "Longest: " + t.Longest + " has hit "+ matches +" time(s)\n")
 
 	io.WriteString(w, "Duration: " + t.Duration + " Minutes\n")
 }
