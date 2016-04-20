@@ -33,11 +33,8 @@ func post(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
-
-
-func main() {
-	http.HandleFunc("/", hello)
+func init() {
+    http.HandleFunc("/", hello)
 	http.HandleFunc("/post", post)
-	http.ListenAndServe(":8000", nil)
 }
 
