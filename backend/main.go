@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 	"encoding/json"
 )
@@ -18,12 +17,12 @@ var t test_struct
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	count := fmt.Sprintf("%v", t.Count)
-	io.WriteString(w, "Count: " + count + "\n")
+	fmt.Fprintln(w, "Count: " + count + "<br />")
 
 	matches := fmt.Sprintf("%v", t.Matches)
-	io.WriteString(w, "Longest: " + t.Longest + " has hit "+ matches +" time(s)\n")
+	fmt.Fprintln(w, "Longest: " + t.Longest + " has hit "+ matches +" time(s)<br />")
 
-	io.WriteString(w, "Duration: " + t.Duration + " Minutes\n")
+	fmt.Fprintln(w, "Duration: " + t.Duration + " Minutes<br />")
 }
 
 func post(w http.ResponseWriter, r *http.Request) {

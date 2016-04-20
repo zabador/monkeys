@@ -65,7 +65,7 @@ func main() {
 }
 
 func post(i int64, s []byte, m int64, d float64){
-	url := "http://localhost:8000/post"
+	url := "http://monkeys-type.appspot.com/post"
 
 	var jsonRequest struct {
 		Count int64
